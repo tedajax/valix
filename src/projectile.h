@@ -12,9 +12,9 @@ public:
 		laser = l;
 
 		if ( !laser )
-			laserimage = load_image( "media/images/projectile.png" );
+			laserimage = load_image( concatmediadir( "images/projectile.png" ) );
 		else
-			laserimage = load_image( "media/images/laser.png" );
+			laserimage = load_image( concatmediadir( "images/laser.png" ) );
 
 		posx = px;
 		posy = py;
