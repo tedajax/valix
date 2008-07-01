@@ -1,3 +1,4 @@
+//Class for automagically moving background to give appearance of movement
 class ScrollingBG
 {
 private:
