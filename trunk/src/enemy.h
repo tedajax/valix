@@ -1,13 +1,23 @@
+//Enemy class
+//Handles drawing, updating, storing information about
+//an individual enemy
 class Enemy
 {
 private:
+	//x position (in pixels) and y position (in pixels)
 	float posx, posy;
+	//x and y velocity (pixels per frame)
 	float velx, vely;
+	//type of enemy, determines image, AI style
 	short type;
+	//Used to change between different types of AI movement
 	short AIstage;
+	//enemy image
 	SDL_Surface *image;
+	//Tells the enemy manager to remove the enemy if it's true
 	bool destroy;
 	
+	//Determines the image to load based on the type
 	SDL_Surface* getImageFromType( short t )
 	{
 		SDL_Surface *returnsurface;
@@ -28,6 +38,7 @@ private:
 	}
 	
 public:
+	//Different constructors
 	Enemy( short t )
 	{
 		type = t;
@@ -79,6 +90,8 @@ public:
 		SDL_FreeSurface( image );
 	}
 	
+	//Basically determines the type, goes to that AI movement style
+	//Then using the current stage moves in the manner programmed
 	void Update()
 	{
 		switch ( type )
@@ -115,10 +128,12 @@ public:
 		posy += vely;
 	}	
 	
+	//Simply apply the SDL surface using the apply_surface function from addblit.h
 	void Draw( SDL_Surface *apply_s )
 	{
 		apply_surface( posx, posy, image, apply_s );
 	}
 	
+	//Lets the enemy manager know to remove the enemy from the game
 	bool Destroy() { return destroy; }
 };
