@@ -52,10 +52,10 @@ public:
     //For adding an item to the end of the list
     void AddNode( node<T> *n )
     {
-	//Create a node that will traverse the list
+		//Create a node that will traverse the list
     	node<T> *current;
     			
-	//If the firstnode is null then it will get the value specified by the parameter
+		//If the firstnode is null then it will get the value specified by the parameter
     	if( FirstNode == 0 )
     	{			
 	    	FirstNode = n;
@@ -73,7 +73,7 @@ public:
 			current->next = n;
     	}
     	
-	//Increase the counter
+		//Increase the counter
     	Count++;
     };
     
