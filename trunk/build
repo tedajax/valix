@@ -1,1 +1,0 @@
-g++ src/main.cpp -o valix -lSDL -lSDL_image -lSDL_gfx -lSDL_ttf
