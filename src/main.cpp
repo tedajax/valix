@@ -1,4 +1,5 @@
 //Includes, ugly but it's there
+#include "valix.h"
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_ttf.h>
@@ -18,6 +19,10 @@
 #include "scrollbg.h"
 #include "enemy.h"
 #include "enemymanager.h"
+#include <cstddef>
+#include <cstring>
+
+#define restrict
 
 using namespace std;
 
@@ -56,6 +61,8 @@ EnemyManager *EMngr;
 //Scrolling background class that simply automatically scrolls the background image seemlessly
 ScrollingBG *ScrBG;
 
+//concatstrings prototype
+char *const concatstrings( char const *const restrict, char const *const restrict );
 
 //SDL initialization, nothing fancy
 bool init()
@@ -85,18 +92,19 @@ bool init()
 bool load_files()
 {
     //Creates the Player class by sending the location of the image for the player to use
-    MainShip = new Player( "media/images/mainship.png" );	
+    MainShip = new Player( concatstrings( media_directory, "images/mainship.png" ) );	
     
     //Background image for the scrolling background
-    bg = load_image( "media/images/background.png" );
-    //Black box, can be replaced with an SDL_gfx call, but hasn't been done yet, may want to create something more decorative in the future
-    infobar = load_image( "media/images/infobar.png" );
+    bg = load_image( concatstrings( media_directory, "images/background.png" ) );
+    //Black box, can be replaced with an SDL_gfx call, but hasn't been done yet
+	//may want to create something more decorative in the future
+    infobar = load_image( concatstrings( media_directory, "images/infobar.png" ) );
     //Image in the bottom-left corner, used for advancing skills
-    skillbutton = load_image( "media/images/skillbutton.png" );
+    skillbutton = load_image( concatstrings( media_directory, "images/skillbutton.png" ) );
     //Experience bar image
-    expbar = load_image( "media/images/expbar.png" );
+    expbar = load_image( concatstrings( media_directory, "images/expbar.png" ) ); 
     //Load the tahoma font
-    font = TTF_OpenFont( "media/fonts/tahoma.ttf", 12 );
+    font = TTF_OpenFont( concatstrings( media_directory, "fonts/tahoma.ttf" ), 12 );
     
     //Create the scrolling background, giving it speed 1 (1 pixel of movement per frame)
     ScrBG = new ScrollingBG( bg, 1 );
@@ -105,10 +113,10 @@ bool load_files()
     
     //Create some testing enemies
     for (int x = 0; x < 480; x += 64)
-    	//The first parameter specifies the type of enemy, this will indicate both the image to use
-    	//and the AI pattern for the enemy to use
-    	//The other parameters are the starting X and Y coordinates to use
-    	EMngr->AddEnemy( 2, 640, x );
+    //The first parameter specifies the type of enemy, this will indicate both the image to use
+    //and the AI pattern for the enemy to use
+    //The other parameters are the starting X and Y coordinates to use
+    EMngr->AddEnemy( 2, 640, x );
 	
     //Hopefully everything worked and we get here without a segfault -_-
     return true;
@@ -162,10 +170,16 @@ void Draw()
     stringstream out;
     string playerdebuginfo;
     
+	//Generate the debug stream
     out.str("");
-    out << MainShip->getPositionX() << " : " << MainShip->getPositionY() << " : " << MainShip->getProjectileCount() << " : " << (int)MainShip->getExpPercent() * 2;
+    out << MainShip->getPositionX() 
+		<< " : " << MainShip->getPositionY() 
+		<< " : " << MainShip->getProjectileCount() 
+		<< " : " 
+		<< (int)MainShip->getExpPercent() * 2;
     playerdebuginfo = out.str();
     
+	//Use SDL_ttf to 
     playerinfo = TTF_RenderText_Solid( font, playerdebuginfo.c_str(), textColor );
     apply_surface( 5, 5, playerinfo, screen );
     //End debugging code
@@ -191,8 +205,8 @@ int main( int argc, char* args[] )
     Timer fps;
 		
     //Main loop
-    while ( quit == false )
-    {
+	while ( quit == false )
+	{
 		//Start recording milliseconds that go by
     	fps.start();    	
     	
@@ -200,15 +214,15 @@ int main( int argc, char* args[] )
     	while ( SDL_PollEvent( &event ) )
     	{
 			if ( event.type == SDL_QUIT )
-			quit = true;
+				quit = true;
     	}
     	
 		//Update keystates
     	keystates = SDL_GetKeyState( NULL );
 
 		//Exit if escape key pressed
-    	if ( keystates[ SDLK_ESCAPE ] )
-    		quit = true;
+   		if ( keystates[ SDLK_ESCAPE ] )
+   			quit = true;
 
 		//Call update
     	Update();
@@ -218,18 +232,40 @@ int main( int argc, char* args[] )
     		
 		//Update the screen		
     	if ( SDL_Flip( screen ) == -1 )
-	 		return 3;
+			return 3;
     	
 		//Delay to maintain a maximum FPS, I have no idea if this works XD
     	if ( fps.get_ticks() < 1000 / FRAMES_PER_SECOND )
-    	{
+	    {
 	   		SDL_Delay( ( 1000 / FRAMES_PER_SECOND ) - fps.get_ticks() );
     	}
-    }
+	}
 
     //uh yeah
     clean_up();
 
     //program exits with no errors
     return 0;
+}
+
+//concatenate 2 char arrays
+char *const concatstrings( char const *const restrict a, char const *const restrict b )
+{
+	assert(a); assert(b);
+
+	using std::size_t; using std::strlen; using std::memcpy;
+
+	size_t const lenA = strlen(a);
+	size_t const lenB = strlen(b);
+
+	char *const buf = new char[ lenA + lenB + 1 ];
+
+	register char *p = buf;
+
+	memcpy(p,a,lenA); p += lenA;
+	memcpy(p,b,lenB);
+
+	p[lenB] = 0;
+
+	return buf;
 }
