@@ -27,10 +27,10 @@ private:
 			//Set the surface based on type value
 			//If no type matches automatically becomes type 1
 			case 1:
-				returnsurface = load_image( "media/images/enemy.png" );
+				returnsurface = load_image( concatmediadir( "images/enemy.png" ) );
 				break;
 			case 2:
-				returnsurface = load_image( "media/images/enemy2.png" );
+				returnsurface = load_image( concatmediadir( "images/enemy2.png" ) );
 				break;
 			default:
 				returnsurface = load_image( "media/images/enemy.png" );

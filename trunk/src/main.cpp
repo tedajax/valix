@@ -1,28 +1,5 @@
 //Includes, ugly but it's there
 #include "valix.h"
-#include <SDL/SDL.h>
-#include <SDL/SDL_image.h>
-#include <SDL/SDL_ttf.h>
-#include <SDL/SDL_gfxPrimitives.h>
-#include "addblit.h"
-#include <cassert>
-#include <string>
-#include <cstdlib>
-#include <ctime>
-#include <sstream>
-#include <math.h>
-#include "rectangle.h"
-#include "Timer.h"
-#include "linkedlist.h"
-#include "projectilemanager.h"
-#include "player.h"
-#include "scrollbg.h"
-#include "enemy.h"
-#include "enemymanager.h"
-#include <cstddef>
-#include <cstring>
-
-#define restrict
 
 using namespace std;
 
@@ -95,16 +72,16 @@ bool load_files()
     MainShip = new Player( concatstrings( media_directory, "images/mainship.png" ) );	
     
     //Background image for the scrolling background
-    bg = load_image( concatstrings( media_directory, "images/background.png" ) );
+    bg = load_image( concatmediadir( "images/background.png" ) );
     //Black box, can be replaced with an SDL_gfx call, but hasn't been done yet
 	//may want to create something more decorative in the future
-    infobar = load_image( concatstrings( media_directory, "images/infobar.png" ) );
+    infobar = load_image( concatmediadir( "images/infobar.png" ) );
     //Image in the bottom-left corner, used for advancing skills
-    skillbutton = load_image( concatstrings( media_directory, "images/skillbutton.png" ) );
+    skillbutton = load_image( concatmediadir( "images/skillbutton.png" ) );
     //Experience bar image
-    expbar = load_image( concatstrings( media_directory, "images/expbar.png" ) ); 
+    expbar = load_image( concatmediadir( "images/expbar.png" ) ); 
     //Load the tahoma font
-    font = TTF_OpenFont( concatstrings( media_directory, "fonts/tahoma.ttf" ), 12 );
+    font = TTF_OpenFont( concatmediadir( "fonts/tahoma.ttf" ), 12 );
     
     //Create the scrolling background, giving it speed 1 (1 pixel of movement per frame)
     ScrBG = new ScrollingBG( bg, 1 );
@@ -246,26 +223,4 @@ int main( int argc, char* args[] )
 
     //program exits with no errors
     return 0;
-}
-
-//concatenate 2 char arrays
-char *const concatstrings( char const *const restrict a, char const *const restrict b )
-{
-	assert(a); assert(b);
-
-	using std::size_t; using std::strlen; using std::memcpy;
-
-	size_t const lenA = strlen(a);
-	size_t const lenB = strlen(b);
-
-	char *const buf = new char[ lenA + lenB + 1 ];
-
-	register char *p = buf;
-
-	memcpy(p,a,lenA); p += lenA;
-	memcpy(p,b,lenB);
-
-	p[lenB] = 0;
-
-	return buf;
 }
