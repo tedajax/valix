@@ -12,7 +12,7 @@ using namespace std;
 template <typename T>
 class node
 {
-	public:
+public:
 	//Pointer to the next item in the list
 	node<T> *next;
 	//Stored value
@@ -29,13 +29,13 @@ class node
 template <typename T>
 class LinkedList
 {
-	private:
+private:
 	//First node for keeping track of the whole list
 	node<T> *FirstNode;
 	//Keep track of the number of items
 	int Count;
 
-	public:
+public:
 	//Set count to 0 and FirstNode to NULL
 	LinkedList()
 	{

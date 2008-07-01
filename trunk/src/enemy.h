@@ -20,9 +20,12 @@ private:
 	//Determines the image to load based on the type
 	SDL_Surface* getImageFromType( short t )
 	{
+		//Stores the surface to return
 		SDL_Surface *returnsurface;
 		switch ( t )
 		{
+			//Set the surface based on type value
+			//If no type matches automatically becomes type 1
 			case 1:
 				returnsurface = load_image( "media/images/enemy.png" );
 				break;
@@ -100,16 +103,20 @@ public:
 				switch ( AIstage )
 				{
 					case 0:
+						//Basically send it to the left, restrict maximum velocity as well
 						if ( velx > -6.0f )
 							velx -= 0.2f;
 							
+						//Determines when to send the enemy the other direction
 						if ( posx <= 100 )
 							AIstage = 1;
 						
 						break;
 					case 1:
+						//move to the right quickly
 						velx += 0.4f;
 						
+						//destroy the enemy when it is no longer in the drawable area
 						if ( posx > 640 )
 							destroy = true;
 							
@@ -118,12 +125,15 @@ public:
 				break;
 				
 			case 2:
+				//slowly move to the left
 				velx = -3;
+				//destroy once it gets passed the drawable location
 				if ( posx < -64 )
 					destroy = true;
 				break;
 		}
 		
+		//Update the positions based on velocity
 		posx += velx;
 		posy += vely;
 	}	
