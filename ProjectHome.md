@@ -1,0 +1,3 @@
+Valix is a 2D sidescrolling space shooter written in C++ using SDL.  Currently only a Linux build exists, but other platforms will later be supported.
+
+This game is also in early development and probably uses outdated or bad coding conventions.  I'm still learning as I go along so any help is appreciated.  I'm currently working on commenting significant portions of the code which have yet to be documented as I had not intended to open source it originally.
